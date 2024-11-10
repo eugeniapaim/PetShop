@@ -1,15 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cliente.h"
+#include "pet.h"
 
 int main(int argc, char *argv[]) {
-    int opcao, opcaoCliente,clientes = 0;
-    Cliente c; // Declaração da variável Cliente
+    int opcao, opcaoCliente,clientes = 0, opcaoPet;
+    Cliente c;
+	Pet p;
+	 // Declaração da variável Cliente
     // Inicializa espaço para salvar cliente
-	if (inicializarClientes()==false)
-	{
-		printf("Cliente não inicializado!");
-	}
+	if (!inicializarClientes() || !inicializarPets()) {
+        printf("Erro ao inicializar sistema!\n");
+        return 1;
+    }
     do {
     	printf("--------------MENU--------------\n");
         printf("0 - Sair\n"
@@ -84,10 +87,71 @@ int main(int argc, char *argv[]) {
                             break;
                     }
                 } while(opcaoCliente != 0); 
-                break;
+            	break;
+            case 2:
+                do {
+                    printf("\n--------------Menu Pet--------------\n");
+                    printf("1 - Listar\n2 - Cadastrar\n3 - Atualizar\n4 - Excluir\n0 - Sair\n");
+                    scanf("%d", &opcaoPet);
+                    switch(opcaoPet) {
+                        case 1:
+                            if (quantidadePets() <= 0) {
+                                printf("\nNenhum pet encontrado!\n");
+                            } else {
+                                printf("\nCODIGO\tNOME\tTIPO\tIDADE\n");
+                                for (int i = 0; i < quantidadePets(); i++) {
+                                    Pet* pet = obterPetPeloIndice(i);
+                                    if (pet) printf("%d\t%s\t%s\t%d\n", pet->codigo, pet->nome, pet->tipo, pet->idade);
+                                }
+                            }
+                            break;
+                        case 2:
+                            printf("Informe o codigo: ");
+                            scanf("%d", &p.codigo);
+                            printf("Informe o nome: ");
+                            scanf("%s", p.nome);
+                            printf("Informe o tipo: ");
+                            scanf("%s", p.tipo);
+                            printf("Informe a idade: ");
+                            scanf("%d", &p.idade);
+                            printf("Informe o codigo do dono: ");
+                            scanf("%d", &p.codigoDono);
+                            salvarPet(p);
+                            printf("\nPet cadastrado com sucesso!\n");
+                            break;
+                        case 3:
+                            printf("Informe o codigo do pet que deseja atualizar: ");
+                            scanf("%d", &p.codigo);
+                            printf("Novo nome: ");
+                            scanf("%s", p.nome);
+                            printf("Novo tipo: ");
+                            scanf("%s", p.tipo);
+                            printf("Nova idade: ");
+                            scanf("%d", &p.idade);
+                            if (atualizarPet(p)) {
+                                printf("Pet atualizado com sucesso!\n");
+                            } else {
+                                printf("Pet nao encontrado.\n");
+                            }
+                            break;
+                        case 4:
+                            printf("Informe o codigo do pet a excluir: ");
+                            scanf("%d", &p.codigo);
+                            if (apagarPetPeloCodigo(p.codigo)) {
+                                printf("Pet excluido com sucesso!\n");
+                            } else {
+                                printf("Pet nao encontrado.\n");
+                            }
+                            break;
+                    }
+                } while(opcaoPet != 0);
+			    break;
         }
     } while(opcao != 0);
 
+    encerrarClientes();
+    encerrarPets();
     return 0;
 }
+
 
