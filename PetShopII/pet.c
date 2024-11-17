@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "servico.h"
+#include "cliente.h"
 
 #define TAMANHO_INICIAL 5
 
@@ -13,7 +15,7 @@ static int totalPets = 0;
 bool inicializarPets() {
     pets = malloc(tamanhoPets * sizeof(Pet));
     if (pets == NULL) {
-        printf("Erro ao alocar mem�ria\n");
+        printf("Erro ao alocar memória\n");
         return false;
     }
     return true;
@@ -24,7 +26,7 @@ bool salvarPet(Pet p) {
         tamanhoPets *= 2;
         Pet* temp = realloc(pets, tamanhoPets * sizeof(Pet));
         if (temp == NULL) {
-            printf("Erro ao alocar mem�ria\n");
+            printf("Erro ao alocar memória\n");
             return false;
         }
         pets = temp;
@@ -93,3 +95,13 @@ bool apagarPetPeloNome(const char* nome) {
     return false;
 }
 
+int verificarServicosAssociados(int codigoPet) {
+    int i;
+    for (i = 0; i < quantidadeServicos(); i++) {
+        Servico* servico = obterServicoPeloIndice(i);
+        if (servico && servico->codigoPet == codigoPet) {
+            return 1;  // Retorna 1 se houver serviços associados
+        }
+    }
+    return 0;  // Retorna 0 se não houver serviços associados
+}
