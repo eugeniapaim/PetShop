@@ -23,4 +23,3 @@ bool apagarPetPeloCodigo(int codigo);
 bool apagarPetPeloNome(const char* nome);
 
 #endif
-
