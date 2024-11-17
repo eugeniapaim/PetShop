@@ -18,6 +18,6 @@ Cliente* obterClientePeloIndice(int indice);
 Cliente* obterClientePeloCodigo(int codigo);
 bool atualizarCliente(Cliente c);
 bool apagarClientePeloCodigo(int codigo);
-bool apagarClientePeloNome(const char* nome);
+bool apagarClientePeloNome(char* nome);
 
 #endif
